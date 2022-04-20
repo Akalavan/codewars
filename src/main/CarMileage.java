@@ -56,99 +56,166 @@ Error Checking
  */
 
 import java.util.Arrays;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class CarMileage {
     public static int isInteresting(int number, int[] awesomePhrases) {
-        if (number < 100) {
+
+        System.out.println("number = " + number);
+        System.out.println("awesomePhrases = " + Arrays.toString(awesomePhrases));
+
+        if (number < 98) {
             return 0;
         }
 
-        if (awesomePhrases.length > 0) {
-            return checkAwesomePhrase(number, awesomePhrases);
+        if (number >= 100 && checkNumber(number, awesomePhrases)) {
+            return 2;
+        } else if (checkNumber(number + 1, awesomePhrases) || checkNumber(number + 2, awesomePhrases)) {
+            return 1;
+        } else {
+            return 0;
         }
+    }
 
-        String[] test = {"allZero", "isPalindrome", "isSequentialDecrementing", "isSequentialIncrementing", "numberIdenticalDigits"};
+    private static boolean checkNumber(int number, int[] awesomePhrases) {
+        String[] test = {"allZero", "isPalindrome", "isSequentialDecrementing", "isSequentialIncrementing", "numberIdenticalDigits", "checkAwesomePhrase"};
         boolean accept = false;
-        for (int i = 0; i < 2; i++) {
-            for (String str :
-                    test) {
-                switch (str) {
-                    case "allZero" :
-                        accept = isAllZeros(number);
-                        break;
-                    case "isPalindrome":
-                        accept = isPalindrome(number);
-                        break;
-                    case "isSequentialDecrementing":
-                        accept = isSequential(number, true);
-                        break;
-                    case "isSequentialIncrementing":
-                        accept = isSequential(number, false);
-                        break;
-                    case "numberIdenticalDigits":
-                        accept = numberIdenticalDigits(number);
-                        break;
-                }
+
+        for (String str :
+                test) {
+            switch (str) {
+                case "allZero" :
+                    accept = isAllZeros(number);
+                    System.out.println("allZero");
+                    break;
+                case "isPalindrome":
+                    accept = isPalindrome(number);
+                    System.out.println("isPalindrome");
+                    break;
+                case "isSequentialDecrementing":
+                    accept = isSequential(number, true);
+                    System.out.println("isSequentialDecrementing");
+                    break;
+                case "isSequentialIncrementing":
+                    accept = isSequential(number, false);
+                    System.out.println("isSequentialIncrementing");
+                    break;
+                case "numberIdenticalDigits":
+                    accept = numberIdenticalDigits(number);
+                    System.out.println("numberIdenticalDigits");
+                    break;
+                case "checkAwesomePhrase":
+                    accept = checkAwesomePhrase(number, awesomePhrases);
+                    System.out.println("checkAwesomePhrase");
+                    break;
+            }
+            if (accept) {
+                break;
             }
         }
-        return 0;
+        return accept;
     }
 
     private static boolean isAllZeros(int number) {
-        for (int i = 100; i < number; i *= 10) {
-            if (number % i != 0) {
-                return false;
-            }
-        }
-        return true;
+//        for (int i = 100; i < number; i *= 10) {
+//            if (number % i != 0) {
+//                return false;
+//            }
+//        }
+//        return true;
+
+        return Stream.<Predicate<String>>of(
+          s -> s.matches("\\d0+")
+        ).anyMatch(p -> number > 99 && p.test(Integer.toString(number)));
     }
 
     private static boolean isPalindrome(int number) {
-        String[] str = Integer.toString(number).split("");
-        StringBuilder partStart = new StringBuilder();
-        StringBuilder partEnd = new StringBuilder();
+//        String[] str = Integer.toString(number).split("");
+//        StringBuilder partStart = new StringBuilder();
+//        StringBuilder partEnd = new StringBuilder();
+//
+//        for (int i = 0; i < str.length / 2; i++) {
+//            partStart.append(str[i]);
+//            partEnd.append(str[str.length - i - 1]);
+//        }
+//
+//        return partStart.toString().equals(partEnd.toString());
 
-        for (int i = 0; i < str.length / 2; i++) {
-            partStart.append(str[i]);
-            partEnd.append(str[str.length - i - 1]);
-        }
-
-        return partStart.toString().equals(partEnd.toString());
+        return Stream.<Predicate<String>>of(
+                s -> new StringBuilder(s)
+                        .reverse()
+                        .toString()
+                        .equals(s))
+                .anyMatch( p -> number > 99 && p.test(Integer.toString(number)));
     }
 
     private static boolean isSequential(int number, boolean isRevers) {
-        int n = number % 10;
-        number /= 10;
-        do {
-            int diff = 0;
+//        int n = number % 10;
+//        number /= 10;
+//        do {
+//            int diff = 0;
+//
+//            if (!isRevers) {
+//                diff = n - number % 10;
+//            } else {
+//                diff = number % 10 - n;
+//            }
+//            if (!isRevers) {
+//                if (diff != 1 && n != 0) {
+//                    return false;
+//                }
+//            } else {
+//                if (diff != 1) {
+//                    return false;
+//                }
+//            }
+//            n = number % 10;
+//            number /= 10;
+//        } while (number > 0);
+//        return true;
 
-            if (!isRevers) {
-                diff = n - number % 10;
-            } else {
-                diff = number % 10 - n;
-            }
+//        char[] num = Integer.toString(number).toCharArray();
+//
+//        for (int i = 0; i < num.length - 1; i++) {
+//            if (!isRevers) {
+//                int i1 = num[i + 1] - num[i];
+//                if (i1 != 1 && i1 != -9) {
+//                    return false;
+//                }
+//            } else {
+//                if ((num[i] - num[i + 1]) != 1) {
+//                    return false;
+//                }
+//            }
+//
+//        }
+//        return true;
 
-            if (diff != 1) {
-                return false;
-            }
-
-            n = number % 10;
-            number /= 10;
-        } while (number > 0);
-        return true;
+        if (!isRevers) {
+            return Stream.<Predicate<String>>of(
+                    "1234567890"::contains
+            )
+                    .anyMatch(p -> number > 99 && p.test(Integer.toString(number)));
+        } else {
+            return Stream.<Predicate<String>>of(
+                    "9876543210"::contains
+            )
+                    .anyMatch(p -> number > 99 && p.test(Integer.toString(number)));
+        }
 
     }
 
-    private static int checkAwesomePhrase(int number, int[] awesomePhrases) {
-        for (int i : awesomePhrases) {
-            int diff = i - number;
-            if (diff == 2 || diff == 1) {
-                return 1;
-            } else if(diff == 0) {
-                return 2;
-            }
-        }
-        return 0;
+    private static boolean checkAwesomePhrase(int number, int[] awesomePhrases) {
+//        for (int i : awesomePhrases) {
+//            if (i - number == 0) {
+//                return true;
+//            }
+//        }
+//        return false;
+
+        return Arrays.stream(awesomePhrases).anyMatch(n -> number == n);
+
     }
 
     private static boolean numberIdenticalDigits(int number) {
@@ -159,16 +226,14 @@ public class CarMileage {
             }
             number /= 10;
         } while (number > 0);
+
         return true;
     }
 
     public static void main(String[] args) {
-       // System.out.println(CarMileage.isInteresting(1221, new int[]{}));
-        System.out.println(CarMileage.isInteresting(10000, new int[]{}));
-//
-//        System.out.println(CarMileage.isInteresting(254, new int[]{1337, 256})); // 1
-//        System.out.println(CarMileage.isInteresting(255, new int[]{1337, 256})); // 1
-//        System.out.println(CarMileage.isInteresting(256, new int[]{1337, 256})); // 2
+
+        System.out.println(CarMileage.isInteresting(11111, new int[]{1335, 246}));
+
     }
 
 

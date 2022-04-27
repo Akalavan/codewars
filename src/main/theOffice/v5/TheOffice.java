@@ -38,7 +38,7 @@ public class TheOffice {
                         return ;
                     }
                     int accept = room.getChairs() - room.getOccupants().length();
-                    int add = (int) IntStream.iterate(0, i -> i < accept && addAll < need, i -> i + 1).count();
+                    int add = (int) IntStream.iterate(0, i -> i < accept && addAll + i < need, i -> i + 1).count();
                     list.add(add);
                 });
 
@@ -48,29 +48,43 @@ public class TheOffice {
     }
 
     public static void main(String[] args) {
-        Room[] rooms = new Room[] {
-                new Room("XXX", 3),
-                new Room("XXXXX", 6),
-                new Room("XXXXXX", 9)
-        };
-        System.out.println(meeting(rooms, 4));
+//        Room[] rooms = new Room[] {
+//                new Room("XXX", 3),
+//                new Room("XXXXX", 6),
+//                new Room("XXXXXX", 9)
+//        };
+//        System.out.println(meeting(rooms, 4));
+//
+//        Room[] rooms1 = new Room[] {
+//                new Room("XXX", 1),
+//                new Room("XXXXXX", 6),
+//                new Room("X", 2),
+//                new Room("XXXXXX", 8),
+//                new Room("X", 3),
+//                new Room("XXX", 1)
+//        };
+//        System.out.println(meeting(rooms1, 5));
+//
+//        Room[] rooms2 = new Room[] {
+//                new Room("XX", 2),
+//                new Room("XXXX", 6),
+//                new Room("XXXXX", 4)
+//        };
+//        System.out.println(meeting(rooms2, 0));
 
-        Room[] rooms1 = new Room[] {
-                new Room("XXX", 1),
+
+
+        Room[] rooms3 = new Room[] {
+                new Room("XXXXX", 8),
+                new Room("X", 4),
+                new Room("X", 1),
+                new Room("X", 8),
+                new Room("XXXXXX", 3),
+                new Room("XXXXXXX", 8),
                 new Room("XXXXXX", 6),
-                new Room("X", 2),
-                new Room("XXXXXX", 8),
-                new Room("X", 3),
-                new Room("XXX", 1)
+                new Room("XX", 5),
+                new Room("XXXX", 4),
         };
-        System.out.println(meeting(rooms1, 5));
-
-        Room[] rooms2 = new Room[] {
-                new Room("XX", 2),
-                new Room("XXXX", 6),
-                new Room("XXXXX", 4)
-        };
-        System.out.println(meeting(rooms2, 0));
-
+        System.out.println(Arrays.toString((int[]) meeting(rooms3, 7)));
     }
 }
